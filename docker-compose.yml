@@ -13,3 +13,14 @@ services:
     ports:
       - 8007:8007
     command: gunicorn -w 4 project.wsgi -b 0.0.0.0:8007
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: "station_disqus"
+      POSTGRES_DB: "station_disqus"
+      POSTGRES_PASS: "okeystationdisqus1"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+
