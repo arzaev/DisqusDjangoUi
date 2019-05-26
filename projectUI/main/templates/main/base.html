@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+{% load static %}
+<meta charset="utf-8">
+
+<title>@Money | {{ name_project }}</title>
+
+{%  block stylesheet %}
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
+<link rel="icon" type="image/png" href="/static/img/{{icon}}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link rel="stylesheet" href="/static/css/layouts/side-menu.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/handsontable-pro@latest/dist/handsontable.full.min.css">
+<link rel="stylesheet" type="text/css" href="https://handsontable.com/static/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/handsontable-pro@latest/dist/handsontable.full.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="/static/c3.9/c3.min.js"></script>
+<link href="/static/c3.9/c3.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" href="{% static 'css/remodal.css' %}">
+<link rel="stylesheet" href="{% static 'css/remodal-default-theme.css' %}">
+<script src="{% static 'js/remodal.js' %}"></script>
+<style>
+#menu .pure-menu-heading {
+	background: {{color_header}};
+}
+
+</style>
+{% endblock %}
+
+</head>
+<body>
+
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="#">{{ name_project }}</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="#modal-group" class="pure-menu-link">Add Group</a></li>
+                <li class="pure-menu-item"><a href="#modal" class="pure-menu-link">Add Accounts</a></li>
+                <li class="pure-menu-item"><a href="{% url 'main:list' %}" class="pure-menu-link">List</a></li>
+                <li class="pure-menu-item"><a href="#modal-actions" class="pure-menu-link">Action</a></li>
+                <li class="pure-menu-item"><a href="#modal-log" class="pure-menu-link">Log</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+
+        {% block content %}
+
+        {% endblock %}
+
+
+    </div>
+</div>
+
+<!-- modal actions -->
+<div class="remodal" data-remodal-id="modal-actions">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Actions</h1>
+
+	{% include 'main/actions/delete.html' %}
+	{% include 'main/actions/set_proxy.html' %}
+	{% include 'main/actions/profile.html' %}
+	{% include 'main/actions/spam_text.html' %}
+	{% include 'main/actions/spam_photo.html' %}
+	{% include 'main/actions/spam_chat.html' %}
+	<br>
+	<br>
+	{% include 'main/actions/check.html' %}
+	{% include 'main/actions/like.html' %}
+	{% include 'main/actions/get_post.html' %}
+	{% include 'main/actions/get_acc.html' %}
+	{% include 'main/actions/get_storage.html' %}
+	{% include 'main/actions/confirm_email.html' %}
+	<br>
+	<br>
+	
+</div>
+
+<!-- modal log -->
+<div class="remodal" data-remodal-id="modal-log">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Log</h1>
+
+	<textarea id="log" name="log" cols="70" rows="20"></textarea>
+	
+  <br>
+  <button data-remodal-action="cancel" class="pure-button pure-input-1-2 button-error">Cancel</button>
+  <button class="button-secondary pure-button" onclick="read_log();">Read Log</button>
+  <button class="button-secondary pure-button" onclick="remove_log();">Remove Log</button>
+</div>
+
+<!-- modal add group -->
+<div class="remodal" data-remodal-id="modal-group">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Add Group</h1>
+
+	<input type="text" placeholder="name group" id="group-input">
+	<br>
+    <br>
+  <button data-remodal-action="cancel" class="pure-button pure-input-1-2 button-error">Cancel</button>
+  <button data-remodal-action="confirm" class="button-secondary pure-button" onclick="addGroup();">OK</button>
+</div>
+
+<!-- modal add accounts -->
+<div class="remodal" data-remodal-id="modal">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Add Items</h1>
+
+	<select id="group-name" style="width: 60%;">
+	{% for group in groups %}
+	  <option value="{{ group }}">{{ group }}</option>
+	{% endfor %}
+	</select>
+	<br>
+	<br>
+	<textarea id="textarea-items" name="textarea-items" cols="60" rows="10"></textarea>
+	
+  <br>
+  <button data-remodal-action="cancel" class="pure-button pure-input-1-2 button-error">Cancel</button>
+  <button data-remodal-action="confirm" class="button-secondary pure-button" onclick="addItems();">OK</button>
+</div>
+
+{% block js %}
+
+<script>
+
+function addGroup() {
+
+	var group = document.getElementById('group-input').value;
+    var jsonText = JSON.stringify({'group': group});
+	$.ajax({
+	  type: 'POST',
+	  traditional: true,
+	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+	  dataType: 'html',
+	  data: jsonText,
+	  url: '{% url 'main:add_group' %}',
+	  success: function(data){
+		location.reload();
+	  }
+  })
+}
+
+function addItems() {
+	e = document.getElementById('group-name');
+	var group = e.options[e.selectedIndex].value;
+	items = document.getElementById('textarea-items').value;
+    var jsonText = JSON.stringify({'group': group, 'items': items});
+	$.ajax({
+	  type: 'POST',
+	  traditional: true,
+	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+	  dataType: 'html',
+	  data: jsonText,
+	  url: '{% url 'main:add_items' %}',
+	  success: function(data){
+		location.reload();
+	  }
+  })
+}
+
+
+function read_log() {
+	$.ajax({
+	  type: 'POST',
+	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+	  url: '{% url 'main:read_log' %}',
+	  success: function(data){
+			document.getElementById('log').value = '';
+			document.getElementById('log').value = data['data'];
+	  }
+  })
+}
+
+
+function remove_log() {
+	$.ajax({
+	  type: 'POST',
+	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+	  url: '{% url 'main:remove_log' %}',
+	  success: function(data){
+		  document.getElementById("log").value = '';
+	  }
+  })
+}
+</script>
+
+
+{% endblock %}
+
+
+</body>
+</html>

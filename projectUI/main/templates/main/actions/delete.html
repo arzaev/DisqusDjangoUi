@@ -1,0 +1,30 @@
+<a href="#modal-action-delete" class="pure-button pure-input-1-2 button-error">Delete</a>
+<div class="remodal" data-remodal-id="modal-action-delete">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Delete Items</h1>
+	<h1>Are you sure?</h1>
+	
+  <br>
+  <button data-remodal-action="cancel" class="button-secondary pure-button">No</button>
+  <button class="pure-button pure-input-1-2 button-error" onclick="delete_items();">Yes</button>
+</div>
+
+<script>
+function delete_items() {
+        var jsonText = JSON.stringify({'list': list, 'command': 'delete'});
+  $.ajax({
+	  	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          type: 'POST',
+          url: '{% url 'main:action' %}',
+          traditional: true,
+          dataType: 'html',
+          data: jsonText,
+          success: function(data){
+				window.location.replace('{% url 'main:list' %}')
+          }
+
+      })
+  list = []
+}
+</script>
+

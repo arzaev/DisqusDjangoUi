@@ -1,0 +1,31 @@
+<a href="#modal-action-confirm-email"><button class="pure-button pure-input-1-2 pure-button-primary">Confirm Email</button></a>
+<div class="remodal" data-remodal-id="modal-action-confirm-email">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Confirm Email</h1>
+	
+  <br>
+  <button data-remodal-action="cancel" class="button-secondary pure-button">No</button>
+  <button class="pure-button pure-input-1-2 pure-button-primary" onclick="confirm_email();">Yes</button>
+</div>
+
+<script>
+function confirm_email() {
+        var jsonText = JSON.stringify({'list': list, 'command': 'confirm_email'});
+  $.ajax({
+	  	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          type: 'POST',
+          url: '{% url 'main:action' %}',
+          traditional: true,
+          dataType: 'html',
+          data: jsonText,
+          success: function(data){
+				window.location.replace('{% url 'main:list' %}')
+          }
+
+      })
+  list = []
+}
+</script>
+
+
+

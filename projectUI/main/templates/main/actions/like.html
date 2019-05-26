@@ -1,0 +1,78 @@
+<a href="#modal-action-like"><button class="pure-button pure-input-1-2 pure-button-primary">Like</button></a>
+<div class="remodal" data-remodal-id="modal-action-like">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Like</h1>
+
+	<form class="pure-form pure-form-stacked">
+    <fieldset>
+
+
+    </fieldset>
+</form>
+  <br>
+  <br>
+
+	<form class="pure-form">
+		<fieldset class="pure-group">
+			<label>Id</label>
+			<textarea id="id_like" class="pure-input" rows="10" placeholder=""></textarea>
+		</fieldset>
+		<br>
+		<fieldset class="pure-group">
+            <label for="name">Count</label>
+            <input id="count_like" type="text" placeholder="">
+		</fieldset>
+		<br>
+		
+		<fieldset class="pure-group">
+            <label for="name">Threads</label>
+            <input id="threads_like" type="text" placeholder="">
+		</fieldset>
+
+		<fieldset class="pure-group">
+            <label for="name">Sleep From:</label>
+            <input id="sleep_from_like" type="text" placeholder="">
+			<br>
+            <label for="name">Sleep To:</label>
+            <input id="sleep_to_like" type="text" placeholder="">
+		</fieldset>
+	</form>	
+
+<br>
+<br>
+
+  
+  <button data-remodal-action="cancel" class="button-secondary pure-button">No</button>
+  <button class="pure-button pure-input-1-2 pure-button-primary" onclick="like();">Yes</button>
+</div>
+
+<script>
+function like() {
+		var data = {};
+		data['post_id'] = document.getElementById("id_like").value;
+		data['count_like'] = document.getElementById("count_like").value;
+
+		data['threads'] = document.getElementById("threads_like").value;
+		data['sleep_from'] = document.getElementById("sleep_from_like").value;
+		data['sleep_to'] = document.getElementById("sleep_to_like").value;
+        var jsonText = JSON.stringify({'list': list, 'command': 'like', 'data': data});
+  $.ajax({
+	  	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          type: 'POST',
+          url: '{% url 'main:action' %}',
+          traditional: true,
+          dataType: 'html',
+          data: jsonText,
+          success: function(data){
+				window.location.replace('{% url 'main:list' %}')
+          }
+
+      })
+  list = []
+}
+</script>
+
+
+
+
+

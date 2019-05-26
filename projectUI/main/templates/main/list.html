@@ -1,0 +1,205 @@
+{% extends 'main/base.html' %}
+
+{% block stylesheet %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div id="hot" class="hot handsontable htColumnHeaders"></div>
+<div class="context" style="margin: 0 auto; width: 900px;">
+<form class="pure-form" method="post">
+{% endblock %}
+
+{% block js %}
+{{block.super}}
+{% load static %}
+<script src="{% static 'js/list.js' %}"></script>
+<script src="https://yui-s.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
+<script>
+YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+	var menuButton = Y.one('.nav-menu-button'),
+		nav        = Y.one('#nav');
+
+	// Setting the active class name expands the menu vertically on small screens.
+	menuButton.on('click', function (e) {
+		nav.toggleClass('active');
+	});
+
+	// Your application code goes here...
+
+});
+
+var list = []
+document.addEventListener("DOMContentLoaded", function() {
+    hot.addHook('afterSelectionEnd', function(r, c, r2, c2) {
+    console.log('coordinates: ', r, c, r2, c2);
+    function listenToTheKey(event) {
+      if (event.metaKey == true) {
+          console.log('meta');
+      } else if (event.ctrlKey == true) {
+        console.log('ctrlKey');
+      } else {
+        console.log('list');
+        list = []
+      }
+    }
+    listenToTheKey(event);
+    if (r < r2) {
+    for (var i = r; i < (r2 + 1); i++) {
+         console.log(hot.getDataAtRow(i));
+        list.push(hot.getDataAtRow(i)[0])
+      }
+      } else if (r > r2) {
+        for (var i = r; i > (r2 - 1); i--) {
+         console.log(hot.getDataAtRow(i));
+        list.push(hot.getDataAtRow(i)[0])
+      }
+      } else {
+      for (var i = r; i < (r2 + 1); i++) {
+         console.log(hot.getDataAtRow(i));
+        list.push(hot.getDataAtRow(i)[0])
+      }
+      }
+    })
+});
+
+var dataObject = [
+{% for item in data %}
+	  {
+		id: {{item.id}},
+		item: '{{item.name}}',
+		proxy: '{{item.proxy}}',
+		profile: '{{item.profile}}',
+		action: '{{item.base_get}}/{{item.base_all}}',
+		status: '{{item.status}}',
+		target: '{{item.target}}',
+		notification: '{{item.notification}}',
+		upvotes: '{{item.upvotes}}',
+		removed: '{{item.removed}}',
+	  },
+{% endfor %}
+];
+var flagRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+  var currencyCode = value;
+  while (td.firstChild) {
+    td.removeChild(td.firstChild);
+  }
+  if (currencyCodes.indexOf(currencyCode) > -1) {
+    var flagElement = document.createElement('DIV');
+    flagElement.className = 'flag ' + currencyCode.toLowerCase();
+    td.appendChild(flagElement);
+  } else {
+    var textNode = document.createTextNode(value === null ? '' : value);
+    td.appendChild(textNode);
+  }
+};
+var hotElement = document.querySelector('#hot');
+var hotElementContainer = hotElement.parentNode;
+
+var hotSettings = {
+  data: dataObject,
+  columns: [
+    {
+      data: 'id',
+      type: 'numeric',
+      width: 40
+    },
+    {
+      data: 'item',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'proxy',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'profile',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'action',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'status',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'target',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'notification',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'upvotes',
+      type: 'text',
+      width: 40
+    },
+    {
+      data: 'removed',
+      type: 'text',
+      width: 40
+    },
+  ],
+  stretchH: 'all',
+  //width: 1110,
+  autoWrapRow: true,
+  currentRowClassName: 'currentRow',
+  //height: 587,
+  maxRows: 99999999,
+  rowHeaders: true,
+  colHeaders: [
+    'ID',
+	'ITEM',
+	'PROXY',
+	'PROFILE',
+	'ACTION',
+	'STATUS',
+	'TARGET',
+	'NOTIFICATION',
+	'UPVOTES',
+	'REMOVED',
+  ],
+  columnSorting: {
+    indicator: true
+  },
+  autoColumnSize: {
+    samplingRatio: 23
+  }
+};
+var hot = new Handsontable(hotElement, hotSettings);
+
+hot.updateSettings({
+    cells: function(row, col) {
+      var cellProperties = {};
+
+      if (hot.getDataAtCell(hot.toVisualRow(row), 5) == 'none') {
+        cellProperties.className = 'myClass';
+      }
+      if (hot.getDataAtCell(hot.toVisualRow(row), 5) == 'username') {
+        cellProperties.className = 'myClass';
+      }
+      if (hot.getDataAtCell(hot.toVisualRow(row), 5) == 'bad') {
+        cellProperties.className = 'myClass';
+      }
+      if (hot.getDataAtCell(hot.toVisualRow(row), 5) == 'sms') {
+        cellProperties.className = 'myClass';
+      }
+
+      return cellProperties;
+    },
+  })
+</script>
+
+
+{% endblock %}

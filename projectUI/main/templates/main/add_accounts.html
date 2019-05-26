@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+<div class="header">
+    add accounts
+</div>
+<div class="content">
+    <form class="pure-form" method="post">
+        {% csrf_token %}
+        <fieldset class="pure-group">
+            <input type="text" class="pure-input-1-2" name="group" placeholder="Group name">
+            <textarea class="pure-input-1-2" name="accounts" placeholder="Accounts" style="margin-top: 0px;margin-bottom: 0px;height: 177px;"></textarea>
+        </fieldset>
+
+        <button type="submit" class="pure-button pure-input-1-2 pure-button-primary">Add</button>
+    </form>
+</div>
+
+{% endblock %}

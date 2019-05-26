@@ -1,0 +1,81 @@
+<a href="#modal-action-spam-chat"><button class="pure-button pure-input-1-2 pure-button-primary">Spam Chat</button></a>
+<div class="remodal" data-remodal-id="modal-action-spam-chat">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Spam Chat</h1>
+
+	<form class="pure-form pure-form-stacked">
+    <fieldset>
+
+
+    </fieldset>
+</form>
+  <br>
+  <br>
+
+	<form class="pure-form">
+		<fieldset class="pure-group">
+			<label>Base</label>
+			<textarea id="base_spam_chat" class="pure-input" rows="10" placeholder=""></textarea>
+		</fieldset>
+		<br>
+		<fieldset class="pure-group">
+			<label>Text</label>
+			<textarea id="text_spam_chat" class="pure-input" rows="5" placeholder=""></textarea>
+		</fieldset>
+		<fieldset class="pure-group">
+            <label for="name">Target</label>
+            <input id="target_spam_chat" type="text" placeholder="">
+		</fieldset>
+		<br>
+		
+		<fieldset class="pure-group">
+            <label for="name">Threads</label>
+            <input id="threads_spam_chat" type="text" placeholder="">
+		</fieldset>
+
+		<fieldset class="pure-group">
+            <label for="name">Sleep From:</label>
+            <input id="sleep_from_spam_chat" type="text" placeholder="">
+			<br>
+            <label for="name">Sleep To:</label>
+            <input id="sleep_to_spam_chat" type="text" placeholder="">
+		</fieldset>
+	</form>	
+
+<br>
+<br>
+
+  
+  <button data-remodal-action="cancel" class="button-secondary pure-button">No</button>
+  <button class="pure-button pure-input-1-2 pure-button-primary" onclick="spam_chat();">Yes</button>
+</div>
+
+<script>
+function spam_chat() {
+		var data = {};
+		data['target'] = document.getElementById("target_spam_chat").value;
+		data['base'] = document.getElementById("base_spam_chat").value;
+		data['text'] = document.getElementById("text_spam_chat").value;
+		data['threads'] = document.getElementById("threads_spam_chat").value;
+		data['sleep_from'] = document.getElementById("sleep_from_spam_chat").value;
+		data['sleep_to'] = document.getElementById("sleep_to_spam_chat").value;
+        var jsonText = JSON.stringify({'list': list, 'command': 'spam_chat', 'data': data});
+  $.ajax({
+	  	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          type: 'POST',
+          url: '{% url 'main:action' %}',
+          traditional: true,
+          dataType: 'html',
+          data: jsonText,
+          success: function(data){
+				window.location.replace('{% url 'main:list' %}')
+          }
+
+      })
+  list = []
+}
+</script>
+
+
+
+

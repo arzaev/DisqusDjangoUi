@@ -1,0 +1,42 @@
+<a href="#modal-action-set-proxy"><button class="pure-button pure-input-1-2 pure-button-primary">Set Proxy</button></a>
+<div class="remodal" data-remodal-id="modal-action-set-proxy">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Set Proxy</h1>
+	
+	<textarea id="proxy_q1" name="proxy_q1" cols="50" rows="10"></textarea>
+	<select id="type_proxy_q1" name="type_proxy_q1" style="width: 50%;">
+		<option value="http">HTTP(S)</option>
+		<option value="socks5">Socks5</option>
+	</select>
+
+  <br>
+  <br>
+  
+  <button data-remodal-action="cancel" class="button-secondary pure-button">No</button>
+  <button class="pure-button pure-input-1-2 pure-button-primary" onclick="set_proxy();">Yes</button>
+</div>
+
+<script>
+function set_proxy() {
+		var data = {};
+		data['proxy'] = document.getElementById("proxy_q1").value;
+		var e = document.getElementById("type_proxy_q1");
+		var type_proxy = e.options[e.selectedIndex].value;
+		data['type_proxy'] = type_proxy
+        var jsonText = JSON.stringify({'list': list, 'command': 'set_proxy', 'data': data});
+  $.ajax({
+	  	  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          type: 'POST',
+          url: '{% url 'main:action' %}',
+          traditional: true,
+          dataType: 'html',
+          data: jsonText,
+          success: function(data){
+				window.location.replace('{% url 'main:list' %}')
+          }
+
+      })
+  list = []
+}
+</script>
+
