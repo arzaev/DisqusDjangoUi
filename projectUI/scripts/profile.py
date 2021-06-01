@@ -28,6 +28,7 @@ class DisqusProfile(InitBot):
 				   'Upgrade-Insecure-Requests': '1',
 				   }
 		r = self.session.get(url, headers=headers, proxies=self.proxies, verify=self.verify, timeout=self.timeout)
+		print(r.status_code)
 
 
 		csrftoken = self.cookie['csrftoken']
@@ -47,6 +48,7 @@ class DisqusProfile(InitBot):
 				   'Connection': 'close',
 				   }
 		r = self.session.put(url, headers=headers, data=files2, files=files, verify=self.verify, proxies=self.proxies, timeout=self.timeout)
+		print(r.status_code)
 		return r.status_code
 
 	def check_email(self):
@@ -61,6 +63,7 @@ class DisqusProfile(InitBot):
 						'Connection': 'close',
 						}
 		r = self.session.get(url, headers=headers, proxies=self.proxies, verify=self.verify, timeout=self.timeout)
+		print(r.status_code)
 		if '"email_verified":false' in r.text:
 			return False
 		return True
@@ -94,10 +97,10 @@ def launch(data):
 def start(data, logger):
 
 	url = "http://{}/api/images/".format(data['data']['api_host'])
+
 	r = requests.post(url,
 		 data={"bot": data['data']['bot'], "network": "disqus", "type": "avatar"},
 		 auth=(data['data']['login_api'], data['data']['password_api']))
-
 	avatars = r.json()['avatars']
 
 	url = "http://{}/api/disqusbots/".format(data['data']['api_host'])
@@ -112,6 +115,7 @@ def start(data, logger):
 	accounts = []
 	for i in data['list']:
 		id = int(i)
+		print(id)
 		item = Item.objects.get(id=id)
 		arg = {}
 		arg['logger'] = logger

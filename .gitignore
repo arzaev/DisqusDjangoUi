@@ -1,9 +1,13 @@
+/.idea
+
 .DS_Store
 .swo
 .swp
 *.swp
-*.swp
 *.swn
+*.swk
+*.swl
+*.swm
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -92,6 +96,7 @@ celerybeat-schedule
 .venv
 env/
 venv/
+venv1/
 disvenv/
 ENV/
 env.bak/

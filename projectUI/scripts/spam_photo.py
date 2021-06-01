@@ -17,6 +17,7 @@ class SpamPhoto(InitBot):
 	def __init__(self, item_proxy, type_proxy, user_agent, cookie):
 		InitBot.__init__(self, item_proxy=item_proxy, type_proxy=type_proxy, user_agent=user_agent)
 		self.session.cookies.update(cookie)
+		self.timeout = 30
 
 	def start(self, url_main, photo):
 		url_main = str(url_main).strip().replace('%0D', '')
@@ -28,7 +29,7 @@ class SpamPhoto(InitBot):
 				   'Connection': 'close',
 				   'Upgrade-Insecure-Requests': '1',
 				   }
-		r = self.session.get(url_main, headers=headers, proxies=self.proxies, verify=self.verify)
+		r = self.session.get(url_main, headers=headers, proxies=self.proxies, verify=self.verify, timeout=self.timeout)
 
 		name = str(url_main).split('/')[-2]
 		forum = str(url_main).split('discussion/')[1].split('/')[0]
@@ -44,7 +45,7 @@ class SpamPhoto(InitBot):
 				   'X-Requested-With': 'XMLHttpRequest',
 				   'Connection': 'close',
 				   }
-		r = self.session.get(url, headers=headers, proxies=self.proxies, verify=self.verify)
+		r = self.session.get(url, headers=headers, proxies=self.proxies, verify=self.verify, timeout=self.timeout)
 		t_e = quote_plus(r.text.split('"clean_title":"')[1].split('"')[0])
 		try:
 			t_u = r.text.split('"signedLink":"http://disq.us/?url=')[1].split('&k')[0]
@@ -67,7 +68,7 @@ class SpamPhoto(InitBot):
 				   'Connection': 'close',
 				   'Upgrade-Insecure-Requests': '1',
 				   }
-		r = self.session.get(url2, headers=headers, proxies=self.proxies, verify=self.verify)
+		r = self.session.get(url2, headers=headers, proxies=self.proxies, verify=self.verify, timeout=self.timeout)
 		thread = r.text.split('"thread":"')[1].split('"')[0]
 
 		name_file = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(6)])

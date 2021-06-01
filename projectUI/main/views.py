@@ -32,6 +32,7 @@ fh.setFormatter(formatter)
 logger.addHandler(ch)
 logger.addHandler(fh)
 
+
 @login_required(login_url='/')
 def homepage(request):
 	context = {}
