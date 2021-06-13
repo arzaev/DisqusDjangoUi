@@ -18,7 +18,7 @@ services:
     environment:
       POSTGRES_USER: "station_disqus"
       POSTGRES_DB: "station_disqus"
-      POSTGRES_PASS: "okeystationdisqus1"
+      POSTGRES_PASS: "ddsfgsdh343t4gdfsDS3gfdh"
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
